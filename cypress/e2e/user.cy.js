@@ -14,30 +14,31 @@ describe('User', () => {
     cy.task('generateUser').then((generateUser) => {
       userTarget = generateUser;
       cy.register(userTarget.email, userTarget.username, userTarget.password);
+    });
+
+    cy.task('generateUser').then((generateUser) => {
       userFollower = generateUser;
-      userFollower.email += 'world';
-      userFollower.username += 'follower';
-      cy.register(
-        userFollower.email,
-        userFollower.username,
-        userFollower.password
-      );
+      const { email, username, password } = userFollower;
+      cy.register(email, username, password);
     });
   });
 
-  it('should be able to follow the another user', () => {
+  it('should be able to follow and unfollow another user', () => {
     signInPage.visit();
-
     signInPage.typeEmail(userFollower.email);
     signInPage.typePassword(userFollower.password);
-
     signInPage.clickSignInBtn();
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
+    cy.url().should('include', '/#/');
+    cy.visit(`/#/@${userTarget.username}`);
+    cy.get('[data-qa="follow-btn"]').should('be.visible');
 
-    cy.visit(`/#/@${userTarget.username.replace('follower', '')}`);
+    cy.get('[data-qa="follow-btn"]').click();
+    cy.get('[data-qa="follow-btn"]').should('not.exist');
+    cy.get('[data-qa="unfollow-btn"]').should('be.visible').and('contain', `Unfollow ${userTarget.username}`);
 
-    cy.contains('button', `Follow ${userTarget.username.replace('follower', '')}`).click();
+    cy.get('[data-qa="unfollow-btn"]').click();
+    cy.get('[data-qa="unfollow-btn"]').should('not.exist');
+    cy.get('[data-qa="follow-btn"]').should('be.visible').and('contain', `Follow ${userTarget.username}`);
   });
 });
