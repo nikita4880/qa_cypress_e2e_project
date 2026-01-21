@@ -47,6 +47,10 @@ class ArticlePageObject extends PageObject {
     this.tagsField.type(tag + '{Enter}');
   }
 
+  clickNewArticleBtn() {
+    cy.getByDataQa('new-article-btn').click();
+  }
+
   clickPublishArticleBtn() {
     this.publishArticleBtn.click();
   }

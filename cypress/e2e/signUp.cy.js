@@ -25,7 +25,7 @@ describe('Sign Up page', () => {
     signUpPage.visit();
     signUpPage.fillSignUpForm(username, email, password);
     signUpPage.clickSignUpBtn();
-    cy.get('.swal-title').should('contain', 'Welcome!');
+    cy.getByDataQa('success-alert').should('be.visible');
     homePage.visit();
     homePage.assertHeaderContainUsername(username);
   });
@@ -37,6 +37,6 @@ describe('Sign Up page', () => {
     signUpPage.typePassword('123132');
     signUpPage.clickSignUpBtn();
 
-    cy.get('.swal-title').should('contain', 'Registration failed!');
+    cy.getByDataQa('error-alert').should('be.visible');
   });
 });

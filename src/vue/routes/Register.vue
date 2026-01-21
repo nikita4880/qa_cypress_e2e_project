@@ -92,6 +92,9 @@ export default {
               title: "Welcome!",
               text: "Your registration was successful!",
               icon: "success",
+              didOpen: (modal) => {
+                modal.setAttribute('data-qa', 'success-alert');
+              }
             });
             return this.$router.push({ name: "home" });
           }
@@ -103,7 +106,10 @@ export default {
           swal({
             title: "Registration failed!",
             text: error,
-            icon: "error"
+            icon: "error",
+            didOpen: (modal) => {
+              modal.setAttribute('data-qa', 'error-alert');
+            }
           });
         });
     }

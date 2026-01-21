@@ -27,6 +27,6 @@ describe('Sign In page', () => {
     signInPage.typePassword(user.password + 'wrong111');
     signInPage.clickSignInBtn();
 
-    cy.get('.swal-title').should('contain', 'Login failed!');
+    cy.getByDataQa('error-alert').should('be.visible');
   });
 });

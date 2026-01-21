@@ -31,7 +31,7 @@ describe('Article', () => {
 
   it('should be created using New Article form', () => {
     cy.task('generateArticle').then((article) => {
-      cy.contains('a', 'New Article').click();
+      articlePage.clickNewArticleBtn();
       cy.url().should('include', 'editor');
 
       articlePage.typeTitle(article.title);
@@ -46,7 +46,7 @@ describe('Article', () => {
 
   it('should be edited using Edit button', () => {
     cy.task('generateArticle').then((article) => {
-      cy.contains('a', 'New Article').click();
+      articlePage.clickNewArticleBtn();
       cy.url().should('include', 'editor');
 
       articlePage.typeTitle(article.title);
@@ -70,7 +70,7 @@ describe('Article', () => {
 
   it('should be deleted using Delete button', () => {
     cy.task('generateArticle').then((article) => {
-      cy.contains('a', 'New Article').click();
+      articlePage.clickNewArticleBtn();
       cy.url().should('include', 'editor');
 
       articlePage.typeTitle(article.title);

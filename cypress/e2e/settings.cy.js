@@ -1,6 +1,7 @@
 /// <reference types='cypress' />
 /// <reference types='../support' />
 
+import { faker } from '@faker-js/faker';
 import HomePageObject from '../support/pages/home.pageObject';
 import SignInPageObject from '../support/pages/signIn.pageObject';
 import SettingsPageObject from '../support/pages/settings.pageObject';
@@ -30,13 +31,13 @@ describe('Settings page', () => {
       const newUsername = newUser.username;
 
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       cy.url().should('include', 'settings');
 
       settingsPage.updateUsername(newUsername);
       settingsPage.clickUpdateSettingsBtn();
 
-      cy.get('.swal-title').should('be.visible');
+      settingsPage.waitForSuccessMessage();
       homePage.visit();
       homePage.assertHeaderContainUsername(newUsername);
     });
@@ -44,37 +45,36 @@ describe('Settings page', () => {
 
   it('should provide an ability to update bio', () => {
     cy.task('generateUser').then((newUser) => {
-      const newBio = 'Updated bio for testing';
+      const newBio = faker.lorem.sentence();
 
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       cy.url().should('include', 'settings');
 
       settingsPage.updateBio(newBio);
       settingsPage.clickUpdateSettingsBtn();
 
-      cy.get('.swal-title').should('be.visible');
+      settingsPage.waitForSuccessMessage();
       cy.visit(`/#/@${user.username}`);
-      cy.contains('p', newBio).should('be.visible');
+      cy.getByDataQa('user-bio').should('contain', newBio);
     });
   });
 
   it('should provide an ability to update email', () => {
     cy.task('generateUser').then((newUser) => {
-      const randomNum = Math.ceil(Math.random(1000) * 1000);
-      const newEmail = `newemail_${randomNum}@test.com`;
+      const newEmail = faker.internet.email();
 
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       cy.url().should('include', 'settings');
 
       settingsPage.updateEmail(newEmail);
       settingsPage.clickUpdateSettingsBtn();
 
-      cy.get('.swal-title').should('be.visible');
+      settingsPage.waitForSuccessMessage();
       // Verify by logging out and logging back in with new email
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       settingsPage.clickLogoutBtn();
 
       signInPage.visit();
@@ -88,20 +88,21 @@ describe('Settings page', () => {
 
   it('should provide an ability to update password', () => {
     cy.task('generateUser').then((newUser) => {
-      const newPassword = 'NewPass123!';
+      const newPassword = faker.internet
+        .password({ length: 12, memorable: false });
 
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       cy.url().should('include', 'settings');
 
       settingsPage.updatePassword(newPassword);
       settingsPage.clickUpdateSettingsBtn();
 
-      cy.get('.swal-title').should('be.visible');
+      settingsPage.waitForSuccessMessage();
 
       // Verify by logging out and logging back in with new password
       homePage.usernameLink.click();
-      cy.contains('a', 'Edit Profile Settings').click();
+      settingsPage.clickEditProfileSettingsBtn();
       settingsPage.clickLogoutBtn();
 
       signInPage.visit();
@@ -115,7 +116,7 @@ describe('Settings page', () => {
 
   it('should provide an ability to log out', () => {
     homePage.usernameLink.click();
-    cy.contains('a', 'Edit Profile Settings').click();
+    settingsPage.clickEditProfileSettingsBtn();
     cy.url().should('include', 'settings');
 
     settingsPage.clickLogoutBtn();

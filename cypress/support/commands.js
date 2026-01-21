@@ -28,7 +28,7 @@ import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command';
 
 addMatchImageSnapshotCommand();
 
-Cypress.Commands.add('getByDataCy', (selector) => {
+Cypress.Commands.add('getByDataQa', (selector) => {
   return cy.get(`[data-qa="${selector}"]`);
 });
 

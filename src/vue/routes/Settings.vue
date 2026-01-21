@@ -94,7 +94,10 @@ export default {
           if (response === true) {
             return swal({
               title: "Update successful!",
-              icon: "success"
+              icon: "success",
+              didOpen: (modal) => {
+                modal.setAttribute('data-qa', 'success-alert');
+              }
             });
           }
           let error = "";

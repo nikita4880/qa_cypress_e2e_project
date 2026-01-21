@@ -51,12 +51,16 @@ class SettingsPageObject extends PageObject {
     this.updateSettingsBtn.click();
   }
 
+  clickEditProfileSettingsBtn() {
+    cy.getByDataQa('edit-profile-settings-btn').click();
+  }
+
   clickLogoutBtn() {
     this.logoutBtn.click();
   }
 
   waitForSuccessMessage() {
-    cy.get('.swal-title').should('be.visible');
+    cy.getByDataQa('success-alert').should('be.visible');
   }
 }
 

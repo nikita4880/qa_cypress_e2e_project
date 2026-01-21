@@ -78,7 +78,10 @@ export default {
       swal({
         title: "Login failed!",
         text: response.errors.body.join(" "),
-        icon: "error"
+        icon: "error",
+        didOpen: (modal) => {
+          modal.setAttribute('data-qa', 'error-alert');
+        }
       });
     }
   },
